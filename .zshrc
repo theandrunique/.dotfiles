@@ -120,3 +120,6 @@ if type rg &> /dev/null; then
   export FZF_DEFAULT_OPTS='-m'
 fi
 export PATH="$PATH:/opt/nvim-linux64/bin"
+
+alias black='python3 -m black'
+alias vim='nvim'
