@@ -15,6 +15,8 @@ require("./treesitter")
 end
 vim.opt.rtp:prepend(lazypath)
 
+local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+
 require("lazy").setup({
 	{ "rose-pine/neovim", name = "rose-pine" },
     { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
@@ -59,13 +61,31 @@ require("lazy").setup({
                 require('null-ls').builtins.diagnostics.mypy,
                 require('null-ls').builtins.diagnostics.ruff,
             }
-        end,
+            on_attach = function(client, bufnr)
+                if client.supports_method('textDocument/formatting') then
+                    vim.api.nvim_clear_autocmds({
+                        group = augroup,
+                        buffer = bufnr,
+                    })
+                    vim.api.nvim_create_autocmd('BuffWritePre', {
+                        group = augroup,
+                        buffer = bufnr,
+                        callback = function()
+                            vim.lsp.buf.format({ bufnr = bufnr })
+                        end,
+                    })
+                end
+            end
+        end
     },
 }, {})
 
 local builtin = require('telescope.builtin')
 vim.keymap.set('n', '<leader>pf', builtin.find_files, {})
 vim.keymap.set('n', '<C-p>', builtin.git_files, {})
+vim.keymap.set('n', '<leader>ps', function()
+	builtin.grep_string({ search = vim.fn.input("Grep > ") })
+end)
 
 -- lst-zero config
 local lsp_zero = require('lsp-zero')
@@ -181,5 +201,7 @@ vim.cmd("set expandtab")
 vim.cmd("set tabstop=4")
 vim.cmd("set softtabstop=4")
 vim.cmd("set shiftwidth=4")
+vim.cmd("set number")
+vim.cmd("set relativenumber")
 vim.cmd("colorscheme catppuccin-mocha")
 
