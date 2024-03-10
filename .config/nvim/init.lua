@@ -42,6 +42,7 @@ require("lazy").setup({
                 'pyright',
                 'mypy',
                 'ruff',
+                'clang'
             },
         }
     },
