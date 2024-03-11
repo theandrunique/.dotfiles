@@ -26,7 +26,5 @@ rm -rf ~/.config/
 
 stow .
 rm ~/install.sh
-
-tmux source-file ~/.tmux.conf
 ```
 
