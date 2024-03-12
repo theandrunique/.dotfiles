@@ -78,6 +78,10 @@ require("lazy").setup({
             end
         end
     },
+    {
+        'Exafunction/codeium.vim',
+        event = 'BufEnter'
+    }
 }, {})
 
 local builtin = require('telescope.builtin')
@@ -204,4 +208,4 @@ vim.cmd("set shiftwidth=4")
 vim.cmd("set number")
 vim.cmd("set relativenumber")
 vim.cmd("colorscheme catppuccin-mocha")
-
+vim.cmd("set statusline=%<%f\\ %=\\ %3{codeium#GetStatusString()}")
